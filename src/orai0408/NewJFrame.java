@@ -6,6 +6,7 @@
 package orai0408;
 
 import java.awt.Color;
+import java.util.Random;
 
 /**
  *
@@ -13,8 +14,10 @@ import java.awt.Color;
  */
 public class NewJFrame extends javax.swing.JFrame {
 
-
-    private int eredmeny;
+    private float eltalaltSzazalek;
+    private int joValaszokSzama = 0;
+    
+    private float eredmeny;
     private int probalkozasokSzama;
     private int kerdesekSzama = 1;
     public NewJFrame() {
@@ -65,6 +68,11 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnUjMuvelet.setText("Új kifejezés kérése");
+        btnUjMuvelet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUjMuveletActionPerformed(evt);
+            }
+        });
 
         pnVisszajelzes.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -195,20 +203,58 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void btnEllenorizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEllenorizActionPerformed
         
-        if (Integer.parseInt(txtEredmeny.getText()) == eredmeny) {
+        if (Float.parseFloat(txtEredmeny.getText()) == eredmeny) {
             pnVisszajelzes.setBackground(Color.GREEN);
             probalkozasokSzama++;
             lbProbalkozasokSzama.setText("Próbálkozások száma: " + probalkozasokSzama);
+            joValaszokSzama++;
+            eltalaltSzazalek = ((float)joValaszokSzama/probalkozasokSzama)*100;
+            lbSzazalek.setText("Eredmény: " + Math.round(eltalaltSzazalek));
+            btnEllenoriz.setEnabled(false);
+            btnMegoldas.setEnabled(false);
         }else {
             pnVisszajelzes.setBackground(Color.RED);
             probalkozasokSzama++;
             lbProbalkozasokSzama.setText("Próbálkozások száma: " + probalkozasokSzama);
+            eltalaltSzazalek = ((float)joValaszokSzama/probalkozasokSzama)*100;
+            lbSzazalek.setText("Eredmény: " + Math.round(eltalaltSzazalek));
         }
     }//GEN-LAST:event_btnEllenorizActionPerformed
 
     private void btnMegoldasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMegoldasActionPerformed
         txtEredmeny.setText(String.valueOf(eredmeny));
+        btnEllenoriz.setEnabled(false);
+        txtEredmeny.setEnabled(false);
+        pnVisszajelzes.setBackground(Color.GRAY);
+        kerdesekSzama++;
+        lbKerdesekSzama.setText("Kérdések száma: " + kerdesekSzama);
     }//GEN-LAST:event_btnMegoldasActionPerformed
+
+    private void btnUjMuveletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUjMuveletActionPerformed
+        btnMegoldas.setEnabled(true);
+        
+        Random rnd = new Random();
+        pnVisszajelzes.setBackground(Color.GRAY);
+        
+        int a = rnd.nextInt(100-1);
+        int b = rnd.nextInt(100-1);
+        
+        eredmeny = (float)a/b;
+        System.out.println(eredmeny);
+        while(eredmeny > 100 && eredmeny % 1 == 0.5) {
+           a = rnd.nextInt(100-1);
+           b = rnd.nextInt(100-1);
+           eredmeny = (float)a/b;
+        }
+        
+        lbMuvelet.setText(a + "/" + b + "=");
+        
+        btnEllenoriz.setEnabled(true);
+        txtEredmeny.setEnabled(true);
+        
+        
+        
+    }//GEN-LAST:event_btnUjMuveletActionPerformed
 
     /**
      * @param args the command line arguments
